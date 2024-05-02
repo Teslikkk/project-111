@@ -14,7 +14,7 @@ result = {
 }
 
 def get_data_for_date(message):
-    file = open('датчик.json', 'r', encoding='utf-8')
+    file = open('data.json', 'r', encoding='utf-8')
     data = json.load(file)
     file.close()
     for i in range(len(data)):
@@ -44,12 +44,12 @@ def get_message(message):
             scope=types.BotCommandScopeChat(message.chat.id)
         )
 
-        file = open('data_example.json', 'r', encoding='utf-8')
+        file = open('data.json', 'r', encoding='utf-8')
         data = json.load(file)
         file.close()
         keyboard = types.InlineKeyboardMarkup()
         for department in list(data.keys()):
-            button = types.InlineKeyboardButton(text=department, callback_data=department)
+            button = types.InlineKeyboardButton(text=department, callback_data='department_'+department)
             keyboard.add(button)
         bot.send_message(message.from_user.id, text='Добро пожаловать!')
         bot.send_message(message.from_user.id, text='Выберите цех, из которого вы хотите получить данные с датчиков', reply_markup=keyboard)
@@ -57,205 +57,68 @@ def get_message(message):
 
 
 
-
-
     @bot.callback_query_handler(func=lambda call: True)
     def callback_worker(call):
-        global active_department
-
-        file = open('датчик.json', 'r', encoding='utf-8')
-        data = json.load(file)
-        file.close()
-        keyboard2 = types.InlineKeyboardMarkup()
-        for department in list(data[active_department].keys()):
-            button1_2 = types.InlineKeyboardButton(text=department, callback_data=department)
-            keyboard2.add(button1_2)
-        bot.send_message(message.from_user.id, text='Выберите ленту для просмотра', reply_markup=keyboard)
+        global active_department, active_lenta, active_vid_datchika, active_datchik
 
 
-
-        file = open('датчик.json', 'r', encoding='utf-8')
-        data = json.load(file)
-        file.close()
-        lentas = []
-
-        for i in range(len(data)):
-            if data[i]['department'] not in departments:
-                departments.append(data[i]['department'])
-            elif active_department == data[i]['department']:
-                lentas.append(data[i]['lenta'])
-
-        if call.data.startswith('Лента'):
-            for lenta in lentas:
-                if call.data == lenta:
-                    result['lenta'] = lenta
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик электричества ', callback_data='Датчик электричества')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик воды', callback_data='Датчик воды')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик давления')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик температуры', callback_data='Датчик температуры')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик температуры')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите вид датчика', reply_markup=keyboard3)
-
-                elif call.data == 'лента №2':
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик электричества ', callback_data='Датчик электричества')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик воды', callback_data='Датчик воды')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик давления')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик температуры', callback_data='Датчик температуры')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик температуры')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите вид датчика', reply_markup=keyboard3)
-
-                elif call.data == 'лента №3':
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик электричества ', callback_data='Датчик электричества')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик воды', callback_data='Датчик воды')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик давления')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик температуры', callback_data='Датчик температуры')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик температуры')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите вид датчика', reply_markup=keyboard3)
-
-                elif call.data == 'лента №4':
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик электричества ', callback_data='Датчик электричества')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик воды', callback_data='Датчик воды')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик давления')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик температуры', callback_data='Датчик температуры')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик температуры')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите вид датчика', reply_markup=keyboard3)
-
-                else:
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик электричества ', callback_data='Датчик электричества')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик воды', callback_data='Датчик воды')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик давления')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик температуры', callback_data='Датчик температуры')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик давления', callback_data='Датчик температуры')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите вид датчика', reply_markup=keyboard3)
-
-        file = open('датчик.json', 'r', encoding='utf-8')
-        data = json.load(file)
-        file.close()
-        vidi_datchikov = []
-
-        for i in range(len(data)):
-            if data[i]['department'] not in departments:
-                departments.append(data[i]['department'])
-            elif active_department == data[i]['department']:
-                vidi_datchikov.append(data[i]['vid_datchika'])
-
-        if call.data.startswith('Датчик №'):
-            file = open('датчик.json', 'r', encoding='utf-8')
+        if call.data.startswith('department_'):
+            active_department = call.data.split('_')[1]
+            file = open('data.json', 'r', encoding='utf-8')
             data = json.load(file)
             file.close()
-            datchiki = []
+            keyboard2 = types.InlineKeyboardMarkup()
+            for lenta in list(data[active_department].keys()):
+                button1_2 = types.InlineKeyboardButton(text=lenta, callback_data='lenta_'+lenta)
+                keyboard2.add(button1_2)
+            bot.send_message(message.from_user.id, text='Выберите ленту для просмотра', reply_markup=keyboard2)
 
-            for i in range(len(data)):
-                if data[i]['department'] not in departments:
-                    departments.append(data[i]['department'])
-                elif active_department == data[i]['department']:
-                    datchiki.append(data[i]['datchik'])
+        # АУСТП|Лента 1
 
-            for datchik in datchiki:
-                if call.data == datchik:
-                    result['datchik'] = datchik
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard4 = types.InlineKeyboardMarkup()
-                    button1_4 = types.InlineKeyboardButton(text='Ввод даты самостоятельно', callback_data='Ввод даты самостоятельно')
-                    button2_4 = types.InlineKeyboardButton(text='Получение данных за две недели', callback_data='Получение данных за две недели')
-                    keyboard4.add(button1_4, button2_4)
-                    bot.send_message(message.from_user.id, text='Выберите дату для вывода информации', reply_markup=keyboard4)
 
-        if call.data.startswith('Ввод даты самостоятельно'):
-            bot.send_message(message.from_user.id, text='Выберите дату для вывода информации ггг-мм-дд')
-            bot.register_next_step_handler(call.message, get_data_for_date)
 
-        elif call.data.startswith('Получение данных за две недели'):
-            bot.send_message(message.from_user.id, text='Все показания за две недели')
-            file = open('датчик.json', 'r', encoding='utf-8')
-            datas = json.load(file)
+        if call.data.startswith('lenta_'):
+            active_lenta = call.data.split('_')[1]
+            file = open('data.json', 'r', encoding='utf-8')
+            data = json.load(file)
             file.close()
-            text = ''
-            for data in datas:
-                if data['department'] == active_department:
-                    text += '\nПоказатели:' + str(data['value']) + '\n'
-                    bot.send_message(call.from_user.id, text=text)
+            keyboard3 = types.InlineKeyboardMarkup()
+            for vid_datchika in list(data[active_department][active_lenta].keys()):
+                button1_3 = types.InlineKeyboardButton(text=vid_datchika, callback_data='vid_datchika_'+vid_datchika)
+                keyboard3.add(button1_3)
+            bot.send_message(message.from_user.id, text='Выберите вид датчика', reply_markup=keyboard3)
 
 
 
-        elif call.data.startswith('Датчик'):
-            for vid_datchika in vidi_datchikov:
-                if call.data == vid_datchika:
-                    result['vid_datchika'] = vid_datchika
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик №1 ',callback_data='Датчик №1')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик №2', callback_data='Датчик №2')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик №3', callback_data='Датчик №3')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик №4', callback_data='Датчик №4')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик №5', callback_data='Датчик №5')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите номер датчика', reply_markup=keyboard3)
-                    break
+        if call.data.startswith('vid_datchika_'):
+            active_vid_datchika = call.data.split('_')[2]
+            file = open('data.json', 'r', encoding='utf-8')
+            data = json.load(file)
+            file.close()
+            keyboard4 = types.InlineKeyboardMarkup()
+            for datchik in list(data[active_department][active_lenta][active_vid_datchika].keys()):
+                button1_4 = types.InlineKeyboardButton(text=datchik, callback_data='datchik'+datchik)
+                keyboard4.add(button1_4)
+            bot.send_message(message.from_user.id, text='Выберите номер датчика', reply_markup=keyboard4)
 
-                elif call.data == 'Датчик воды':
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик №1 ',callback_data='Датчик №1')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик №2', callback_data='Датчик №2')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик №3', callback_data='Датчик №3')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик №4', callback_data='Датчик №4')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик №5', callback_data='Датчик №5')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите номер датчика', reply_markup=keyboard3)
-                    break
 
-                elif call.data == 'Датчик давления':
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик №1 ',callback_data='Датчик №1')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик №2', callback_data='Датчик №2')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик №3', callback_data='Датчик №3')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик №4', callback_data='Датчик №4')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик №5', callback_data='Датчик №5')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите номер датчика', reply_markup=keyboard3)
-                    break
 
-                elif call.data == 'Датчик температуры':
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик №1 ',callback_data='Датчик №1')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик №2', callback_data='Датчик №2')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик №3', callback_data='Датчик №3')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик №4', callback_data='Датчик №4')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик №5', callback_data='Датчик №5')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите номер датчика', reply_markup=keyboard3)
-                    break
+        if call.data.startswith('datchik_'):
+            active_datchik = call.data.split('_')[1]
+            file = open('data.json', 'r', encoding='utf-8')
+            data = json.load(file)
+            file.close()
+            keyboard5 = types.InlineKeyboardMarkup()
+            for date in list(data[active_department][active_lenta][active_vid_datchika][active_datchik].keys()):
+                button1_5 = types.InlineKeyboardButton(text=date, callback_data='date'+date)
+                keyboard5.add(button1_5)
+            bot.send_message(message.from_user.id, text='Выберите дату для вывода информации', reply_markup=keyboard5)
 
-                else:
-                    bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
-                    keyboard3 = types.InlineKeyboardMarkup()
-                    button1_3 = types.InlineKeyboardButton(text='Датчик №1 ',callback_data='Датчик №1')
-                    button2_3 = types.InlineKeyboardButton(text='Датчик №2', callback_data='Датчик №2')
-                    button3_3 = types.InlineKeyboardButton(text='Датчик №3', callback_data='Датчик №3')
-                    button4_3 = types.InlineKeyboardButton(text='Датчик №4', callback_data='Датчик №4')
-                    button5_3 = types.InlineKeyboardButton(text='Датчик №5', callback_data='Датчик №5')
-                    keyboard3.add(button1_3, button2_3, button3_3, button4_3, button5_3)
-                    bot.send_message(call.from_user.id, text='Выберите номер датчика', reply_markup=keyboard3)
-                    break
-            print(result)
+            keyboard6 = types.InlineKeyboardMarkup()
+            button1_6 = types.InlineKeyboardButton(text='Ввод даты самостоятельно', callback_data='Ввод даты самостоятельно')
+            button2_6 = types.InlineKeyboardButton(text='Получение данных за две недели', callback_data='Получение данных за две недели')
+            keyboard6.add(button1_6, button2_6)
+            bot.send_message(message.from_user.id, text='Выберите дату для вывода информации', reply_markup=keyboard6)
 
 
 
@@ -270,6 +133,37 @@ def get_message(message):
 
 
 
+
+
+
+
+        #     for datchik in datchiki:
+        #         if call.data == datchik:
+        #             result['datchik'] = datchik
+        #             bot.send_message(call.from_user.id, text='Вы выбрали ' + call.data)
+        #             keyboard4 = types.InlineKeyboardMarkup()
+        #             button1_4 = types.InlineKeyboardButton(text='Ввод даты самостоятельно', callback_data='Ввод даты самостоятельно')
+        #             button2_4 = types.InlineKeyboardButton(text='Получение данных за две недели', callback_data='Получение данных за две недели')
+        #             keyboard4.add(button1_4, button2_4)
+        #             bot.send_message(message.from_user.id, text='Выберите дату для вывода информации', reply_markup=keyboard4)
+        #
+        # if call.data.startswith('Ввод даты самостоятельно'):
+        #     bot.send_message(message.from_user.id, text='Выберите дату для вывода информации ггг-мм-дд')
+        #     bot.register_next_step_handler(call.message, get_data_for_date)
+        #
+        # elif call.data.startswith('Получение данных за две недели'):
+        #     bot.send_message(message.from_user.id, text='Все показания за две недели')
+        #     file = open('датчик.json', 'r', encoding='utf-8')
+        #     datas = json.load(file)
+        #     file.close()
+        #     text = ''
+        #     for data in datas:
+        #         if data['department'] == active_department:
+        #             text += '\nПоказатели:' + str(data['value']) + '\n'
+        #             bot.send_message(call.from_user.id, text=text)
+        #
+        #
+        #
 
 
 bot.polling(none_stop=True, interval=0)
